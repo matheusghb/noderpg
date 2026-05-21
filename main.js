@@ -1,0 +1,60 @@
+import readline from "node:readline"
+import { promises } from "node:readline/promises"
+
+class Player {
+    
+    constructor(name,route,stats,itens) {
+    this.name = name
+    this.level = 0
+    this.route = route
+    this.stats = {
+        POT: stats[0],
+        DES: stats[1],
+        ESP: stats[2],
+        INT: stats[3],
+    }
+    this.itens = itens,
+    this.cred = {
+        HP: 10,
+        MN: 4,
+    }
+
+    if (this.stats.POT > 0) {
+        this.cred.HP += this.stats.POT * 3
+    } else {
+        this.cred.HP += -3
+    }
+
+    if (this.stats.ESP > 0) {
+        this.cred.MN += this.stats.ESP * 3
+    } else {
+        this.cred.MN += -3
+    }
+
+    }
+
+    printinfo() {
+
+        console.log(`Seu nome é ${this.name}, ${this.route} nível ${this.level}. Seus status são:\n
+POT: ${this.stats.POT}
+DES: ${this.stats.DES}
+ESP: ${this.stats.ESP}
+INT: ${this.stats.INT}
+HP: ${this.cred.HP}
+MG: ${this.cred.MN}\n
+E seus itens são: `)
+        this.itens.forEach(element => {
+            console.log("- "+element+";")
+        });
+    }
+
+}
+const rl = readline.createInterface({
+    input:process.stdin,
+    output:process.stdout
+})
+
+
+const name = await rl.question("Give name")
+console.log(name)
+rl.close()
