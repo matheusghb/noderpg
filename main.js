@@ -45,17 +45,6 @@ flexview.setStyleSheet(`
         border-radius: 5px;
         background-color: white;
     }
-
-    #label {
-
-        color: black;    
-        width: 100%;
-        height: 20%;
-        margin: 40%;
-        background-color: white;
-    
-    }
-
     #inputname {
         
         flex: 1;
@@ -97,7 +86,7 @@ class Player {
         } else {
             this.cred.MN += -3
         }
-    }
+    } //rrtyrryrt
 
     printinfo() {
         console.log(`Seu nome é ${this.name}, ${this.route} nível ${this.level}. Seus status são:\n
