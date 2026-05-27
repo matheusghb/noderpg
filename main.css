@@ -43,6 +43,13 @@ header {
     color: var(--color1);
     font-family: TEXT;
     display: flex;
+    #killbutton {
+        margin-left: auto;
+        cursor: pointer;
+    }
+    #killbutton:hover {
+        filter: drop-shadow(1px 1px 0px var(--color1));
+    }
 }
 
 .mdiv {
@@ -54,7 +61,8 @@ header {
     border: 4px solid var(--color2);
 
     .ldiv {
-        background-color: var(--color1);
+        background-color: var(--color2);
+        color: var(--color1);
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -65,11 +73,19 @@ header {
 
         .player {
             position: relative;
-            flex: 2.5;
-            color: var(--color1);
-            background-color: var(--color2);
-            overflow-y: auto;
+            flex: 2.5;;
             padding: 3%;
+            display: flex;
+            flex-direction: column;
+
+            .divider {
+                font-family: TEXT;
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                align-items: center;
+            }
+
             * {
                 z-index: 1;
             }
@@ -77,34 +93,71 @@ header {
                 color: var(--color2);
                 background-color: var(--color1);
             }
+            .mainstts {
+                flex: 1;
+                display: flex;
+                margin-bottom: 2%;
+                div {
+                    flex: 1;
+                }
+            }
             .routenlvl {
-                border-bottom: 4px dotted var(--color1);
+                
                 padding: 2%;
                 margin-bottom: 2%;
             } 
             .STATS {
+                flex: 1;
                 font-family: TEXT;
-                margin: auto;
                 width: fit-content;
-                max-width: 80%;
+                div {
+                    margin-bottom: 2%
+                }
             }
 
-            .inventory {
+            .page {
                 position: absolute;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                z-index: 2;
-                background-color: var(--color2);
+                z-index: 2;;
             }
 
         }
+
+        .nav {
+            user-select: none;
+            display: flex;
+            flex-flow: column wrap;
+            background-color: var(--color1);
+            color: var(--color2);
+            flex: 1;
+            margin-bottom: 1%;
+            padding: 2%;
+            overflow: hidden;
+            .press {
+                cursor: pointer;
+                flex: 1;
+                display: flex;
+                align-items: center;
+                font-size: 1vw;
+                padding-left: 1%;
+                min-height: 22%;
+                max-height: 25%;
+            }
+            .press:hover {
+                outline: 2px dotted var(--color2);
+            }
+        }
+
         .info {
             cursor: pointer;
-            flex: 1;
+            flex: 1.2;
             overflow-y: auto;
             padding: 5%;
+            background-color: var(--color1);
+            color: var(--color2);
             div {
                 border-left: 2px solid var(--color2);
                 padding-left: 5%;
@@ -121,17 +174,6 @@ header {
             justify-content: center;
         }
 
-        .stats {
-            flex: 2;
-            background-color: blue;
-        }
-
-        .actions {
-            flex: 1;
-            background-color: greenyellow;
-
-        }
-
     }
 
     .rdiv {
@@ -139,12 +181,44 @@ header {
         margin: 2%;
         border: 2px solid var(--color2);
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+
+        .monsterview {
+            display: none;
+            flex: 5;
+            border: 2px solid var(--color2);
+            margin: 3%;
+            animation: show .3s linear;
+        }
 
         #prompt {
             background-color: var(--color1);
             padding: 3%;
             overflow-y: auto;
-            height: 100%;
+            overflow-x: hidden;
+            flex: 20;
+
+            .interact {
+                display: flex;
+                padding: 2%;
+                align-items: flex-start;
+                .icon {
+                    font-family: TEXT;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 15vh;
+                    border: 2px solid var(--color2);
+                    aspect-ratio: 1;
+                    font-size: 3vh;
+                }
+                p {
+                    padding-top: 0%;
+                    flex: 1;
+                    line-break: anywhere;
+                }
+            }
 
             .title {
                 font-family: TEXT;
@@ -153,6 +227,7 @@ header {
                 justify-content: center;
                 align-items: center;
                 .line {
+                    user-select: none;
                     flex: 1;
                     min-height: 20%;
                     background-color: var(--color2);
@@ -188,7 +263,38 @@ header {
 
         }
 
+        .input {
+            flex: 1;
+            padding: 2%;
+            input {
+                background: none;
+                border: none;
+                width: 100%;
+                color: var(--color2);
+                padding: 1%;
+            }
+            input:focus {
+                background-color: var(--color2);
+                color: var(--color1);
+                border: none;
+                outline: none;
+            }
+        }
 
+    }
+
+}
+
+@keyframes show {
+
+    0% {
+        transform: scaleY(0%);
+    }
+    50% {
+        transform: scaleY(30%);
+    }
+    100% {
+        transform: scaleY(100%);
     }
 
 }
