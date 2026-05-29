@@ -1,79 +1,239 @@
 let pmt 
 let info
-let p 
+let playerdiv
+let playerheader
+var player
+
+const loot = [
+    {
+        nome: "ESPADA ENFERRUJADA",
+        tipo: "arma",
+        desc: "Só o suficiente pra lhe tirar daqui.",
+        qntd: 1,
+        dado: dano = () => {
+            return Math.floor((Math.random() * 4)+3)
+        }
+    },
+    {
+        nome: "CARAPAÇA ROBUSTA",
+        tipo: "vestimenta",
+        desc: "Aderida a sua pele com força, reduzindo impacto.",
+        qntd: 1,
+        efeito: addarmadura = () => {
+            player.armadura += 2
+        }
+    }
+]
+
+const events = [
+    battle = () => {
+
+        class Enemy {
+            
+            constructor(name,individualidades,HP,drops,sprites) {
+                this.name = name
+                this.individualidades = individualidades
+                this.HP = [HP,HP] 
+                this.drops = drops
+                this.sprites = sprites
+            }
+
+        }
+
+        const skills = [{
+            nome: "Soco simples",
+            efeito: dano = () => {return Math.floor(Math.random * 4)}
+        }]
+
+        const sprite = ["8' H '8","8- H -8"]
+
+        const enemylist = []
+
+        for (let i = 0; i < 2;i++) {
+            enemylist.push(new Enemy("goblin",skills,3,loot[0],sprite)) 
+        }
+        
+        const view = document.getElementsByClassName("monsterview")[0] 
+        let pos = 0
+        enemylist.forEach((enemy) => {
+            pos += 1
+            const div = document.createElement("div")
+            const spritediv = document.createElement("div")
+            div.className = "enemy"
+            const p = document.createElement("p")
+            p.innerHTML = pos
+
+            if (enemy.sprites.length > 1) {
+                let spriteIndex = 0
+                setInterval(() => {
+                    spritediv.innerHTML = enemy.sprites[spriteIndex]
+                    spriteIndex = (spriteIndex + 1) % enemy.sprites.length
+                }, 500)
+            } else {
+                div.innerHTML = sprite[0]
+            }
+            div.append(p,spritediv)
+            view.append(div)
+        })
+
+        view.style.display = "flex"
+
+    },
+    interaction = () => {
+        console.log("interaction")
+    },
+    ruins = () => {
+        console.log("ruins")
+    }
+]
+
+const regalias = {
+    teste: {
+        nome: "teste",
+        desc: "teste",
+        efeito: "uggg"
+    },
+    outroteste: {
+        nome: "ouughhgb",
+        desc: "shjakd",
+        efeito: "ouuuughg"
+    }
+}
+
+const classes = {
+    gladiador: {
+        POT: 3,
+        DES: 1,
+        ESP: 0,
+        INT: -1,
+        individualidades: [
+            {
+                nome: "GOLPE EXTRA",
+                tipo: "ação",
+                desc: "Pode atacar novamente, contanto que possa pagar o custo de MANA.",
+                custo: 4,
+            },
+            {
+                nome: "PESO PESADO",
+                tipo: "passiva",
+                desc: "Todos os seus golpes físicos tem 25% de chance de <b>Atordoar</b>."
+            }
+        ],
+        itens: [
+            loot[0],loot[1]
+        ],
+        desc: "GLADIADOR"
+    },
+    pistoleiro: {
+        desc: 'PISTOLEIRO',
+    },
+    nobre: {
+        desc: 'Nobre',
+    },
+    ectobiologo: {
+        desc: 'ECTOBIOLOGO'
+    }
+
+    
+}
 
 class Player {
     
-    constructor(name,route,stats,itens) {
+    constructor(name,route,regalias) {
+    
     this.name = name
     this.level = 0
     this.route = route
-    this.stats = {
-        POT: stats[0],
-        DES: stats[1],
-        ESP: stats[2],
-        INT: stats[3],
-    }
-    this.itens = itens,
+
     this.cred = {
         HP: [10,10],
-        MN: [4,4],
+        MP: [4,4],
     }
+
     this.buffs = {
         dmg_red: 0,
         dmg_buff: 0,
         HP_regen: 0,
         MN_regen: 0,
     }
-    this.perks = []
 
-    this.stats.HP.forEach((HP) => {
-        if (this.stats.POT > 0) {
-            HP += this.stats.POT *3
-        } else {
-            HP += this.stats.POT 
-        }
-    })
+    this.armadura = 0
+    this.regalias = [regalias]
+
+    this.individualidades = route.individualidades
+    this.parafernalha = route.itens
+
+    this.stats = {
+        POT: route.POT,
+        DES: route.DES,
+        ESP: route.ESP,
+        INT: route.INT
+    }
+
+    if (this.stats.POT > 0) {
+        this.addcred("HP",this.stats.POT * 3,true)
+    }
 
     if (this.stats.ESP > 0) {
-        this.cred.MN += this.stats.ESP * 2
-    } else {
-        this.cred.MN += -2
+        this.addcred("MP", this.stats.ESP * 3,true)
     }
 
+    this.compatriotas = []
+    this.comorbidades = []
+
     }
 
-    printinfo() {
+    addcred (stat,num, max) {
 
-        console.log(`Seu nome é ${this.name}, ${this.route} nível ${this.level}. Seus status são:\n
-POT: ${this.stats.POT}
-DES: ${this.stats.DES}
-ESP: ${this.stats.ESP}
-INT: ${this.stats.INT}
-HP: ${this.cred.HP}
-MG: ${this.cred.MN}\n
-E seus itens são: `)
-        this.itens.forEach(element => {
-            console.log("- "+element+";")
-        });
+        if (this.cred[stat]) {
+            if (max) {
+                this.cred[stat][0] += num
+                this.cred[stat][1] += num
+            } else {
+
+                if ((this.cred[stat][0]+num) > this.cred[stat][1]) {
+                    this.cred[stat][0] = this.cred[stat][1]
+                } else {
+                    this.cred[stat][0] += num
+                }
+                
+            }
+            document.getElementById(stat).innerHTML = this.cred[stat][0]+"/"+this.cred[stat][1]
+        } else {
+            console.log("Valor"+stat+"não foi encontrado.")
+        }
+
     }
 
 }
 
 window.onload = function() {
+    
+    async function main () {
+        player = await createPlayer()
+        pushp('"'+player.name+'", Você começa a compreender seus arredores, decidindo caminhar com o que encontrou ao seu lado ao acordar.')
+        await event()
+    }
 
     pmt = document.getElementById("prompt")
     info = document.getElementsByClassName("info")[0]
+    const nav = document.getElementsByClassName("nav")[0].children
+    playerdiv = document.getElementsByClassName("player")[0]
+    playerheader = document.getElementById("playertitle")
 
     info.addEventListener("click",function () {
         const title = "INFO"
-        const txt = "Infomativos ficam aqui. <b>CLIQUE</b> ou apenas bote o mouse <b>EM CIMA</b> de elementos destacados para tentar ver informações sobre eles. <b>CLIQUE AQUI</b> a qualquer momento pra recuperar essa tela."
+        const txt = "Infomativos ficam aqui. <i>CLIQUE</i> ou apenas bote o mouse <i>EM CIMA</i> de elementos destacados para tentar ver informações sobre eles. <i>CLIQUE AQUI</i> a qualquer momento pra recuperar essa tela."
 
         changeinfo(title, txt)
 
     })
 
-    
+    for (let i = 0; i < nav.length; i++) {
+        nav[i].addEventListener("click",function() {
+            page(this.id)
+        })
+    }
 
     const sts = document.getElementsByClassName("STATS")[0].children
 
@@ -107,7 +267,7 @@ window.onload = function() {
 
                 l.forEach((txt) => {
                     const li = document.createElement("li")
-                    li.innerHTML = "<b>"+txt+";</b>"
+                    li.innerHTML = "<i>"+txt+";</i>"
                     ul.append(li)
                 })
 
@@ -116,35 +276,183 @@ window.onload = function() {
         }
     }
 
-    async function main () {
-
-        const teste = await getinput()  
-        battle()        
-
-    }
-
     main()
 
 }
 
-function battle () {
+function event() {
 
-    document.getElementsByClassName("monsterview")[0].style.display = "flex"
-    pushp("Uma horda selvagem se aproxima!")
+    events[0]()
+    //events[Math.floor(Math.random() * events.length)]()
+    
+}
+
+function page(id) {
+    
+    const page = document.createElement("div")
+    page.className = "page"
+
+    const exit = document.createElement("div")
+    exit.innerHTML = "x"
+    exit.className = "exit"
+    exit.onmousedown = () => {
+        page.remove()
+        exit.remove()
+        playerheader.innerHTML = "*** PLAYER-SCREEN ***"
+    }
+
+    const p = document.createElement("p")
+    const innerdiv = document.createElement("div")
+    const ul = document.createElement("ul")
+    innerdiv.className = "innerdiv"
+
+    
+
+    switch(id) {
+        case "individualidades": {
+            p.innerHTML = "Suas <i>INDIVIDUALIDADES</i> podem ser utilizadas dentro de combate ao custo de MP."
+            playerheader.innerHTML = "******* INDIVIDUALIDADES"
+            break
+        }
+        case "parafernalha": {
+            p.innerHTML = "Suas <i>PARAFERNALHAS</i> são itens de natureza variada com uso único. Aqui é o seu INVENTÁRIO."
+            playerheader.innerHTML = "******* PARAFERNALHAS"
+            break
+        }
+        case "regalias": {
+            p.innerHTML = "Suas <i>REGaLIAS</i> são uma naturez  a única atrelada a seu personagem."
+            playerheader.innerHTML = "******* REGALIAS"
+            break
+        }
+        case "compatriotas": {
+            p.innerHTML = "Seus <i>COMPATRIOTAS</i> representam aliados que estão lhe acompanhando neste momento."
+            playerheader.innerHTML = "******* COMPATRIOTAS"
+            break
+        }
+        case "comorbidades": {
+            p.innerHTML = "Suas <i>COMORBIDADES</i> são condições atualmente lhe afetando."
+            playerheader.innerHTML = "******* COMORBIDADES"
+            break
+        }
+        case "ref": {
+            p.innerHTML = "Sobre o jogo: "
+            playerheader.innerHTML = "******* REFERÊNCIAS"
+            break
+        }
+    }
+
+    if (id != "ref") {
+        if (player) {
+            if (player[id].length > 0) {
+                player[id].forEach((item) => {
+                    const li = document.createElement("li")
+                    li.innerHTML = "<b>"+item.nome+"</b>: "+item.desc
+                    const qntd = document.createElement("b")
+                    qntd.innerHTML = "x"+item.qntd
+                    ul.append(li,qntd)
+                })
+                innerdiv.append(ul)
+            } else {
+                innerdiv.innerHTML = "Você não possuí "+id+" neste momento."
+            }
+        } else {
+            innerdiv.innerHTML = "Você não possuí "+id+" neste momento."
+        }    
+    }  
+
+    playerheader.append(exit)
+    page.append(p,innerdiv)
+    playerdiv.append(page)
 
 }
 
-function pushp(txt,position) {
+async function createPlayer() {
+
+    pushp("Qual é o seu <i>Nome</i>?")
+    const name = await getinput()
+    pushp("<b>"+name+"</b> é o nome que você sente lhe chamando quando fecha os olhos.")
+    document.getElementById("NAME").innerHTML = name
+
+    const keyblist = []
+
+    for (key in classes) {
+        const keyb = document.createElement("b")
+        keyb.innerHTML = key
+        keyb.className = "option"
+        keyblist.push(keyb)
+    }
+
+    keyblist.forEach((b) => {
+        b.onmouseover = () => {changeinfo(b.innerHTML,classes[b.innerHTML].desc);}
+    })
+
+    pushp("E qual será sua <i>classe</i> entre: ",keyblist)
+
+    while (true) {
+        var pclass = await getinput()
+        if (classes[pclass]) {
+            document.getElementById("ROUTE").innerHTML = pclass
+            pushp("O caminho do "+pclass+" define sua identidade.")
+            break
+        } else {
+            pushp("Você deve ser uma das opções acima.")
+        }
+    }
+
+    const rgl = []
+
+    for (key in regalias) {
+        regb = document.createElement("b")
+        regb.innerHTML = key
+        regb.className = "option"
+        rgl.push(regb)
+    }
+
+    rgl.forEach((key) => {
+        key.onmouseover = () => {
+            changeinfo(key.innerHTML,regalias[key.innerHTML].desc)
+        }
+    })
+
+    pushp("Por fim, escolha uma <i>Regalia</i> entre: ", rgl)
+
+    while (true) {
+        var rega = await getinput()
+        if (regalias[rega]) {
+            pushp("Você aceita <i>"+rega+"</i> como sua natureza.")
+            break
+        } else {
+            pushp("Escolha uma das opções acima.")
+        }
+    }
+
+    const p = new Player(name,classes[pclass],regalias[rega])
+
+    document.getElementById("HP").innerHTML = p.cred.HP[0]+"/"+p.cred.HP[1]
+    document.getElementById("MP").innerHTML = p.cred.MP[0]+'/'+p.cred.MP[1]
+
+    return p
+
+}
+
+function pushp(txt,...adds) {
     const p = document.createElement("p")
     p.innerHTML = txt
-    p.style.opacity = .8
-    pmt.append(p)
-
-    if (position) {
-        pmt.scrollTop = pmt.scrollHeight    
-    } else [
-        pmt.scrollTop = 0
-    ]
+    let added 
+    adds.forEach((add) => {
+        added = add
+    })
+    if (Array.isArray(added)) {
+        pmt.append(p)
+        added.forEach((add) => {
+            const br = document.createElement("br")
+            pmt.append(br,add)
+        })
+    } 
+    else {
+        pmt.append(p,adds)
+    }
+    pmt.scrollTop = pmt.scrollHeight    
     
 }
 
@@ -180,11 +488,11 @@ function getinput() {
             if (event.code == "Enter") {
                 const value = document.getElementById("playerinput").value
                 if (value == '') {
-                    document.getElementById('playerinput').placeholder = "> Preencha antes de enviar."
+                    document.getElementById('playerinput').placeholder = "=> Preencha antes de enviar."
                 } else {
-                    document.getElementById('playerinput').placeholder = "> Preencha e pressione ENTER para enviar."
+                    document.getElementById('playerinput').placeholder = "=> Preencha e pressione ENTER para enviar."
                     document.getElementById("playerinput").value = ''
-                    pushp("> "+value,true)
+                    pushp("=> "+value)
                     window.removeEventListener("keydown",input)
                     resolve(value)                    
                 }

@@ -10,7 +10,7 @@
 <body>
     <div class="mdiv">
         <div class="ldiv">
-            <header>*** PLAYER-SCREEN ***</header>
+            <header id="playertitle">*** PLAYER-SCREEN ***</header>
             <div class="player">
                 <div class="mainstts">
                     <div>
@@ -18,29 +18,29 @@
                         <div class="routenlvl"><p id="ROUTE">???</p><p>LVL: <b>0</b></p></div>                         
                     </div>
                     <div>
-                        <p>HP: <b id="HP">10/10</b></p>
-                        <p>MP: <b id="MP">4/4</b></p>
+                        <p>HP: <b id="HP">???</b></p>
+                        <p>MP: <b id="MP">???</b></p>
                     </div>
                 </div>
-                <div class="divider">* * * * * * * * * * * *</div>
                 <div class="STATS">
-                    <div id="POT">POT:.............<b>0</b><p id="BONUS">[+0] </div>
-                    <div id="DES">DES:.............<b>0</b><p id="BONUS">[+0] </div>
-                    <div id="ESP">ESP:.............<b>0</b><p id="BONUS">[+0] </div>
-                    <div id="INT">INT:.............<b>0</b><p id="BONUS">[+0] </div>
+                    <div id="POT">POT:.................<b>0</b><p id="BONUS"></div>
+                    <div id="DES">DES:.................<b>0</b><p id="BONUS"></div>
+                    <div id="ESP">ESP:.................<b>0</b><p id="BONUS"></div>
+                    <div id="INT">INT:.................<b>0</b><p id="BONUS"></div>
                 </div>
-            </div>
-            <div class="nav">
-                <div class="press">* INDIVIDUALIDADES</div>
-                <div class="press">* PARAFERNALHA</div>
-                <div class="press">* REGALIAS</div>
-                <div class="press">* COMPATRIOTAS</div>
-                <div class="press">* COMORBIDADES</div>
+                <div class="nav">
+                    <div id="individualidades" class="press">* INDIVIDUALIDADES</div>
+                    <div id="parafernalha" class="press">* PARAFERNALHA</div>
+                    <div id="regalias" class="press">* REGALIAS</div>
+                    <div id="compatriotas" class="press">* COMPATRIOTAS</div>
+                    <div id="comorbidades" class="press">* COMORBIDADES</div>
+                    <div id="ref" class="press">* REFERÊNCIAS</div>
+                </div>
             </div>
             <div class="info">
                 <div>
                     <h1>> INFO</h1>
-                    <p>Infomativos ficam aqui. <b>CLIQUE</b> ou apenas bote o mouse <b>EM CIMA</b> de elementos destacados para tentar ver informações sobre eles. <b>CLIQUE AQUI</b> a qualquer momento pra recuperar essa tela.</p>
+                    <p>Infomativos ficam aqui. <i>CLIQUE</i> ou apenas bote o mouse <i>EM CIMA</i> de elementos destacados para tentar ver informações sobre eles. <i>CLIQUE AQUI</i> a qualquer momento pra recuperar essa tela.</p>
                 </div>
             </div>
         </div>
@@ -50,16 +50,14 @@
             </div>
             <div id="prompt">
                 <div class="title"><h1>NO-RPG</h1><div class="line">DHASJKHDKSAH</div></div>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet quas atque voluptates hic asperiores rerum alias aliquid reiciendis voluptatem qui ad deserunt ea ipsam laudantium beatae, iusto nisi possimus minima! Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis impedit molestiae, ducimus dicta porro adipisci, minima sint minus, voluptate atque suscipit odio vero esse eveniet ab quod modi! Quisquam, qui. Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe blanditiis tempora odio. Aperiam, ipsum! Repellat deleniti dolores vero enim id, mollitia placeat fuga porro atque voluptatem, nostrum dolore modi minima. Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt, nulla fugiat. Nemo officia provident itaque quasi rem animi adipisci, quibusdam impedit, illum tempore, nesciunt quisquam maxime magni reprehenderit qui laudantium. Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum iusto error facilis nam, provident dolor, excepturi voluptas culpa cum omnis vitae. Illo ducimus hic dolor tenetur! Placeat tempora tempore nihil.</p>
-                <div class="interact">
-                    <div class="icon">
-                        0 _ 0
-                    </div>
-                    <p><b>GOOBLOGABOO:</b>BLABLABLABLABLABLABBLAABLABLABLABLA Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iure quod labore, nostrum rem cum repudiandae voluptate iste nisi vel sint sed debitis, deserunt modi accusantium quas nobis ut consequuntur fugiat. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque aperiam accusamus aliquid. Possimus expedita debitis, velit temporibus aliquam nihil enim voluptatibus veritatis magnam? Voluptates excepturi voluptatum, delectus quibusdam incidunt porro. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab, nesciunt? Nobis atque sequi tenetur officiis amet alias doloribus eos animi doloremque iste itaque laudantium quas aut, delectus, magnam consectetur dolorum.</p>
-                </div>
+                <p>O <i>Mundo</i> abre os seus olhos como um mergulho em água fria, arrancando sua consciência do conforto da inexistência. Não antes disso você já recorda-se da construção de sua carne, seu corpo, moldado a base de um pensamento vago. Agora que já existe, deve-se tornar <i>complexo.</i> Afinal...</p>
+                <!-- .special com h1+p cria uma div de título, .interact com uma div .icon e um p cria uma tela de interação de NPC. -->
             </div>
-            <div class="input"><input id="playerinput" type="" placeholder="> Preencha e pressione ENTER para enviar."></div>
+            <div class="input"><input id="playerinput" type="" placeholder="=> Preencha e pressione ENTER para enviar."></div>
         </div>       
+    </div>
+    <div class="themes">
+        dhsajk
     </div>
 </body>
 </html>
