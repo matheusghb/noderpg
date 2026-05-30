@@ -1,66 +1,136 @@
-let pmt 
-let info
-let playerdiv
-let playerheader
-var player
+// ditto = "o que eu disse acima"
+// </3 definindo funções globais v
 
-const loot = [
-    {
-        nome: "ESPADA ENFERRUJADA",
-        tipo: "arma",
-        desc: "Só o suficiente pra lhe tirar daqui.",
-        qntd: 1,
-        dado: dano = () => {
-            return Math.floor((Math.random() * 4)+3)
-        }
-    },
-    {
-        nome: "CARAPAÇA ROBUSTA",
-        tipo: "vestimenta",
-        desc: "Aderida a sua pele com força, reduzindo impacto.",
-        qntd: 1,
-        efeito: addarmadura = () => {
-            player.armadura += 2
-        }
+let pmt // div do historico de prompts
+let info // div de info
+let playerdiv // div do container com as informações do player (nome lvl etc)
+let playerheader // header acima dessa página
+var player // variável que vai guardar a classe
+
+class Player {
+    
+    constructor(name,route,regalias) { // string, obj, obj
+    
+    this.name = name 
+    this.level = 1 
+    this.route = route // referir-se a values.js
+
+    this.cred = { // [valor ATUAL, valor MÁXIMO]
+        HP: [10,10], //HEALTH POINTS
+        MP: [4,4], // MANA POINTS
     }
-]
 
-const events = [
-    battle = () => {
+    this.armadura = 0 // Redução de dano
+    this.regalias = regalias // perks
 
-        class Enemy {
+    this.individualidades = route.individualidades // referir-se a values.js
+    this.parafernalha = route.itens // ditto
+
+    this.parafernalha.forEach((item) => {   // loopa pelos valores de parafernalha 
+        if (item.tipo == "arma") {          // pra alocar eles a arma e vestimenta
+            this.arma = item                // pois são os itens iniciais.
+        }
+        if (item.tipo == "vestimenta") {
+            this.vestimetna = item
+        }
+    })
+
+    this.stats = { // alocação de status
+        POT: route.POT, // referir-se a values.js. POTÊNCIA
+        DES: route.DES, // ditto. DESTREZA
+        ESP: route.ESP, //ditto. ESPÍRITO
+        INT: route.INT //ditto. INTELECTO
+    }
+
+    this.compatriotas = [] // lista de aliados
+    this.comorbidades = [] // lista de condições aflingindo o personagem
+
+    if (this.stats.POT > 0) { // se a POTÊNCIA for maior que 0
+        this.addcred("HP",this.stats.POT * 3,true) // multiplica por 3 e adiciona
+    } else { // se for igual ou menor
+        this.addcred("HP",this.stats.POT * 2, true) // multiplica por 2 e adiciona (então ou +0 ou +(-2))
+    }
+
+    if (this.stats.ESP > 0) { // Ditto só que com ESPÍRITO
+        this.addcred("MP",this.stats.ESP * 2, true) // Ditto mas multiplica por 2 
+    } else { // Ditto
+        this.addcred("MP",this.stats.ESP, true) // Ditto mas não multiplica (+0 ou +(-1))
+    }
+
+    }
+
+    addcred (stat,num, max) {   // incrementação dos valores de HELTH POINTS e MANA POINTS
+                                // stat = string, "HP" ou "MP", num = int, valor incrementado, max = boolean, se True aumenta atual e maximo
+        if (this.cred[stat]) { // fallback, checa se existe um valor em cred com a chave stat
+            if (max) { // se adicionar no valor máximo...
             
-            constructor(name,individualidades,HP,drops,sprites) {
-                this.name = name
-                this.individualidades = individualidades
-                this.HP = [HP,HP] 
-                this.drops = drops
-                this.sprites = sprites
+                this.cred[stat][0] += num // incrementa em ambos dos valores, linha 17
+                this.cred[stat][1] += num // ditto
+            
+            } else { // senão...
+
+                if ((this.cred[stat][0]+num) > this.cred[stat][1]) { // se o valor ATUAL + num for MAIOR que o MÁXIMO
+                    this.cred[stat][0] = this.cred[stat][1] // o valor é ignorado e o ATUAL para no MÁXIMO (não pode passar)
+                } else { // senão
+                    this.cred[stat][0] += num // incrementa naturalmente
+                }
+                
             }
 
+            document.getElementById(stat).innerHTML = this.cred[stat][0]+"/"+this.cred[stat][1] // modifica o valor da credencial (HP ou MP)
+                                                                                                // no site com os valores calculados
+
+        } else {
+            console.log("Valor"+stat+"não foi encontrado.") // resultado do fallback
         }
 
-        const skills = [{
-            nome: "Soco simples",
-            efeito: dano = () => {return Math.floor(Math.random * 4)}
-        }]
+    }
 
-        const sprite = ["8' H '8","8- H -8"]
+}
 
-        const enemylist = []
+class Enemy {
+        
+        constructor(name,individualidades,HP,stats,drops,sprites,desc) {
+            this.name = name
+            this.individualidades = individualidades
+            this.HP = [HP,HP] 
+            this.stats = stats
+            this.drops = drops
+            this.sprites = sprites
+            this.desc = desc
+    }
 
-        for (let i = 0; i < 2;i++) {
-            enemylist.push(new Enemy("goblin",skills,3,loot[0],sprite)) 
+}
+
+const events = [
+    battle = async (p) => {
+
+        const sprite = []
+
+        let enemylist = []
+
+        for (let i = 0; i < 5;i++) {
+            const enemyselect = enemies[Math.floor(Math.random() * enemies.length)]
+            enemylist.push(new Enemy(enemyselect.name+(i+1),
+            enemyselect.individualidades,
+            enemyselect.HPbase,
+            enemyselect.stats,
+            enemyselect.loot,
+            enemyselect.sprite,
+            enemyselect.desc+" número "+(i+1)+".")) 
         }
         
         const view = document.getElementsByClassName("monsterview")[0] 
+
         let pos = 0
         enemylist.forEach((enemy) => {
             pos += 1
             const div = document.createElement("div")
+            div.id = pos
             const spritediv = document.createElement("div")
             div.className = "enemy"
             const p = document.createElement("p")
+
             p.innerHTML = pos
 
             if (enemy.sprites.length > 1) {
@@ -72,147 +142,106 @@ const events = [
             } else {
                 div.innerHTML = sprite[0]
             }
+
+            spritediv.onmouseover = () => {
+                changeinfo(enemy.name,enemy.desc)
+            }
+
             div.append(p,spritediv)
             view.append(div)
         })
 
+        console.log(enemylist)
+
         view.style.display = "flex"
 
+        pushp("Um grupo de inimigos se encontra com você.")
+
+        while (enemylist.length > 0) {
+
+            pushp("O que você deseja fazer entre: ",['- atacar','- defender','- item','- correr'])
+            const act = await getinput()
+
+            switch (act) {
+                case "atacar": 
+
+                    let target
+
+                    if (enemylist.length > 1) {
+                        pushp("Escolha 1 dos "+enemylist.length+" alvos: ")
+                        target = await getinput()                        
+                    } else {
+                        target = 1
+                    }
+
+                    if (0 < target && target <= enemylist.length) {
+
+                        const enemy = enemylist[target-1]
+
+                        if (Math.floor((Math.random() * 15)+player.stats[player.arma.atributo]) > (enemy.stats.DES)+5) {
+                            dano = player.arma.efeito()
+
+                            pushp("Você desferiu um total de: <b>"+dano+"</b> de dano </i>"+player.arma.tipodano+"</i> no inimigo: <i>"+enemylist[target-1].name+"</i>.")
+                            enemylist[target-1].HP[0] -= dano
+                            if (enemylist[target-1].HP[0] <= 0) {
+                                pushp("Você derrotou "+enemylist[target-1].name+"!")
+                                document.getElementById(target).remove()
+                                enemylist = (enemylist.slice(0,target-1)).concat(enemylist.slice(target))
+                                const divs = document.getElementsByClassName("enemy")
+                                for (let i = 0; i < divs.length; i++) {
+                                    divs[i].id = (i+1)
+                                    divs[i].querySelector("p").innerHTML = (i+1)
+                                }
+                            }                            
+                        } else {
+                        
+                            pushp("Você errou!")
+                        
+                        }
+
+                    } else {
+                        pushp("Escolha baseado no número acima deles.")
+                    }
+                    break
+                case "defender": 
+                    pushp("Defender")
+                    break
+                case "item": 
+                    pushp("Item")
+                    break
+                case "correr": 
+                    pushp("Correr")
+                    break
+                default:
+                    pushp("Escolha uma das opções acima.")
+            }
+
+            if (enemylist.length == 0) {
+                pushp("Você venceu o combate.")
+                break
+            }
+
+            enemylist.forEach((enemy) => {
+                console.log(enemy)
+            })
+
+        }
+
     },
-    interaction = () => {
+    interaction = (p) => {
         console.log("interaction")
     },
-    ruins = () => {
+    ruins = (p) => {
         console.log("ruins")
     }
 ]
-
-const regalias = {
-    teste: {
-        nome: "teste",
-        desc: "teste",
-        efeito: "uggg"
-    },
-    outroteste: {
-        nome: "ouughhgb",
-        desc: "shjakd",
-        efeito: "ouuuughg"
-    }
-}
-
-const classes = {
-    gladiador: {
-        POT: 3,
-        DES: 1,
-        ESP: 0,
-        INT: -1,
-        individualidades: [
-            {
-                nome: "GOLPE EXTRA",
-                tipo: "ação",
-                desc: "Pode atacar novamente, contanto que possa pagar o custo de MANA.",
-                custo: 4,
-            },
-            {
-                nome: "PESO PESADO",
-                tipo: "passiva",
-                desc: "Todos os seus golpes físicos tem 25% de chance de <b>Atordoar</b>."
-            }
-        ],
-        itens: [
-            loot[0],loot[1]
-        ],
-        desc: "GLADIADOR"
-    },
-    pistoleiro: {
-        desc: 'PISTOLEIRO',
-    },
-    nobre: {
-        desc: 'Nobre',
-    },
-    ectobiologo: {
-        desc: 'ECTOBIOLOGO'
-    }
-
-    
-}
-
-class Player {
-    
-    constructor(name,route,regalias) {
-    
-    this.name = name
-    this.level = 0
-    this.route = route
-
-    this.cred = {
-        HP: [10,10],
-        MP: [4,4],
-    }
-
-    this.buffs = {
-        dmg_red: 0,
-        dmg_buff: 0,
-        HP_regen: 0,
-        MN_regen: 0,
-    }
-
-    this.armadura = 0
-    this.regalias = [regalias]
-
-    this.individualidades = route.individualidades
-    this.parafernalha = route.itens
-
-    this.stats = {
-        POT: route.POT,
-        DES: route.DES,
-        ESP: route.ESP,
-        INT: route.INT
-    }
-
-    if (this.stats.POT > 0) {
-        this.addcred("HP",this.stats.POT * 3,true)
-    }
-
-    if (this.stats.ESP > 0) {
-        this.addcred("MP", this.stats.ESP * 3,true)
-    }
-
-    this.compatriotas = []
-    this.comorbidades = []
-
-    }
-
-    addcred (stat,num, max) {
-
-        if (this.cred[stat]) {
-            if (max) {
-                this.cred[stat][0] += num
-                this.cred[stat][1] += num
-            } else {
-
-                if ((this.cred[stat][0]+num) > this.cred[stat][1]) {
-                    this.cred[stat][0] = this.cred[stat][1]
-                } else {
-                    this.cred[stat][0] += num
-                }
-                
-            }
-            document.getElementById(stat).innerHTML = this.cred[stat][0]+"/"+this.cred[stat][1]
-        } else {
-            console.log("Valor"+stat+"não foi encontrado.")
-        }
-
-    }
-
-}
 
 window.onload = function() {
     
     async function main () {
         player = await createPlayer()
         pushp('"'+player.name+'", Você começa a compreender seus arredores, decidindo caminhar com o que encontrou ao seu lado ao acordar.')
-        await event()
+        await event(player)
     }
 
     pmt = document.getElementById("prompt")
@@ -280,9 +309,9 @@ window.onload = function() {
 
 }
 
-function event() {
+function event(p) {
 
-    events[0]()
+    events[0](p)
     //events[Math.floor(Math.random() * events.length)]()
     
 }
@@ -347,9 +376,17 @@ function page(id) {
                 player[id].forEach((item) => {
                     const li = document.createElement("li")
                     li.innerHTML = "<b>"+item.nome+"</b>: "+item.desc
-                    const qntd = document.createElement("b")
-                    qntd.innerHTML = "x"+item.qntd
-                    ul.append(li,qntd)
+                    if (item.qntd) {
+                        const qntd = document.createElement("b")
+                        qntd.innerHTML = "x"+item.qntd
+                        ul.append(li,qntd)
+                    } else if (item.custo) {
+                        const custo = document.createElement("b")
+                        custo.innerHTML = item.custo+" MP"
+                        ul.append(li,custo)
+                    } else {
+                        ul.append(li)
+                    }
                 })
                 innerdiv.append(ul)
             } else {
@@ -377,7 +414,7 @@ async function createPlayer() {
 
     for (key in classes) {
         const keyb = document.createElement("b")
-        keyb.innerHTML = key
+        keyb.innerHTML = "- "+key
         keyb.className = "option"
         keyblist.push(keyb)
     }
@@ -403,7 +440,7 @@ async function createPlayer() {
 
     for (key in regalias) {
         regb = document.createElement("b")
-        regb.innerHTML = key
+        regb.innerHTML = "- "+key
         regb.className = "option"
         rgl.push(regb)
     }
@@ -430,6 +467,11 @@ async function createPlayer() {
 
     document.getElementById("HP").innerHTML = p.cred.HP[0]+"/"+p.cred.HP[1]
     document.getElementById("MP").innerHTML = p.cred.MP[0]+'/'+p.cred.MP[1]
+
+    const stats = document.getElementsByClassName("STATS")[0].children
+    for (let i = 0; i < stats.length; i++) {
+        stats[i].children[0].innerHTML = p.stats[stats[i].children[0].id]
+    }
 
     return p
 
@@ -492,7 +534,7 @@ function getinput() {
                 } else {
                     document.getElementById('playerinput').placeholder = "=> Preencha e pressione ENTER para enviar."
                     document.getElementById("playerinput").value = ''
-                    pushp("=> "+value)
+                    pushp("=> <i>"+value+"</i>")
                     window.removeEventListener("keydown",input)
                     resolve(value)                    
                 }

@@ -236,6 +236,10 @@ header {
                     justify-content: center;
                     align-items: center;
                 }
+                div:hover {
+                    background-color: var(--color2);
+                    color: var(--color1);
+                }
             }
         }
 
