@@ -10,15 +10,31 @@
 
 :root {
 
-    --color1: #000;
+    --color1: #000000;
     --color2: #fbff00;
 
 }
+
+
 
 * {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    scrollbar-color: var(--color2) var(--color1);
+    scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+
+    background: var(--color2);
+
+}
+
+*::webkit-scrollbar-thumb {
+
+    background: var(--color1);
+
 }
 
 html, body {
@@ -346,11 +362,228 @@ header {
 
     display: flex;
     flex-direction: column;
-    border: 2px dotted var(--color2);
     position: absolute;
-    height: 92%;
-    left: 2%;
-    margin: auto;
+    width: 5%;
+    height: fit-content;
+    left: 0;
+    bottom: 0;
+    margin: 1%;
+    padding: .3%;
+    padding-top: 0%;
+    overflow-y: auto;
+    max-height: 69%;
+
+    .themeoption, .btn {
+
+        padding: 5%;
+
+    }
+
+    .themeoption {
+        position: static;
+        width: 70%;
+        top: 0;
+        margin: auto;
+        cursor: pointer;
+        aspect-ratio: 1;
+        display: none;
+        flex-flow: wrap;
+        margin-bottom: 30%;
+        background-color: var(--color2);
+
+        div {
+            height: 50%;
+            aspect-ratio: 1;
+        }
+        .cor1 {
+           background-color: var(--color1);
+        }
+    }
+
+    .btn {
+        top: 0;
+        position: sticky;
+        margin: auto;
+        cursor: pointer;
+        width: 100%;
+        aspect-ratio: 1;
+        display: flex;
+        flex-flow: wrap;
+        margin-bottom: 30%;
+        background-color: var(--color2);
+        div {
+            height: 50%;
+            aspect-ratio: 1;
+        }
+        .cor1 {
+           background-color: var(--color1);
+        }
+    }
+
+    #tema1 {
+        background-color: #ff2781;
+        .cor1 {
+            background-color: #000000;
+        }
+    }
+
+    #tema2 {
+
+        background-color: rgb(253, 79, 27);
+
+        .cor1 {
+
+            background-color: rgb(255, 207, 168);
+
+        }
+
+
+    }
+
+    #tema3 {
+
+        background-color: #fbff00;
+
+        .cor1 {
+
+            background-color: black;
+
+        }
+
+    }
+
+    #tema4 {
+
+        background-color: blue;
+
+        .cor1 {
+
+            background-color: lightblue;
+
+        }
+
+    }
+
+    #tema5 {
+
+        background-color: black;
+
+        .cor1 {
+
+            background-color: white;
+
+        }
+
+
+    }
+
+    #tema6 {
+
+        background-color: #323232;
+
+        .cor1 {
+
+            background-color: #929292;
+
+        }
+
+    }
+
+    #tema7 {
+
+        background-color: orange;
+
+        .cor1 {
+
+            background-color: darkblue;
+
+        }
+
+    }
+
+    #tema8 {
+
+        background-color: purple;
+
+        .cor1 {
+
+            background-color: black;
+
+        }
+
+
+    }
+
+    #tema9 {
+
+        background-color: #e23500;
+
+        .cor1 {
+
+            background-color: #ffe136;
+
+        }
+
+    }
+
+    #tema10 {
+
+        background-color: #000000;
+
+        .cor1 {
+
+            background-color: #20401f;
+
+        }
+
+    }
+
+    #tema11 {
+
+        background-color: #463A3B;
+
+        .cor1 {
+
+            background-color: #D4C9CC;
+
+        }
+
+    }
+
+    #tema12 {
+
+        background-color: #3e1601;
+
+        .cor1 {
+
+            background-color: #ba1016;
+
+        }
+
+    }
+
+    #tema13 {
+
+        background-color: #ff7b03;
+
+        .cor1 {
+
+            background-color: #272727;
+
+        }
+
+    }
+
+    #tema14 {
+
+        background-color: #c8ff00;
+
+        .cor1 {
+
+            background-color: #000a66;
+
+        }
+    }
 
 }
 

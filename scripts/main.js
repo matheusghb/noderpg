@@ -156,7 +156,7 @@ const events = [ // lista de eventos possíveis quando o jogo estiver rodando, g
 ]
 
 window.onload = function() { // criação da interface
-    
+
     async function main () { // essa função dita toda a sequência de eventos, é a **PRINCIPAL**
         player = await createPlayer() 
         pushp('"'+player.name+'", Você começa a compreender seus arredores, decidindo caminhar com o que encontrou ao seu lado ao acordar.')
@@ -172,6 +172,55 @@ window.onload = function() { // criação da interface
     const nav = document.getElementsByClassName("nav")[0].children
     playerdiv = document.getElementsByClassName("player")[0]
     playerheader = document.getElementById("playertitle")
+    const opt = document.getElementsByClassName("themeoption")
+
+    document.getElementById("currenttheme").onclick = () => {
+
+        for (let i = 0; i < opt.length; i++) {
+
+            const item = opt[i]
+
+            if (item.style.display == "flex") {
+
+                item.style.display = "none"
+
+            } else {
+
+                item.style.display = "flex"
+
+            }
+
+        }
+
+    }
+
+    for (let i = 0; i < opt.length;i++) {
+
+        opt[i].onclick = () => {
+
+            const color1div = opt[i].querySelector("div")
+            const color1 = window.getComputedStyle(color1div).backgroundColor // cor do fundo
+
+            const color2div = opt[i]
+            const color2 = window.getComputedStyle(color2div).backgroundColor // cor dos textos
+
+            const themediv = document.getElementById("currenttheme")
+            themediv.style.setProperty("background-color",color2)
+
+            const divs = themediv.querySelectorAll(".cor1")
+
+            for (let i = 0; i < divs.length;i++) {
+                divs[i].style.setProperty("background-color",color1)
+
+            }
+
+            const root = document.querySelector(":root")
+            root.style.setProperty('--color1',color1)
+            root.style.setProperty('--color2',color2)
+
+        }
+
+    }
 
     info.addEventListener("click",function () {
 
@@ -490,7 +539,7 @@ function getinput() { // Promessa que espera até o usuario clicar "Enter" para 
                     document.getElementById("playerinput").value = ''
                     pushp("=> <i>"+value+"</i>")
                     window.removeEventListener("keydown",input)
-                    resolve(value)                    
+                    resolve(value.toLowerCase())                    
                 }
 
             } 
