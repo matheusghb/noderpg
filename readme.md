@@ -13,7 +13,7 @@ Customizado, baseado em HTML, JAVASCRIPT e CSS com um host exterior ao invés de
 
 # Instrução de instalação e execução
 
-`Método online:` Utilize de seu navegador para entrar no site [online!](https://juliet83c.neocities.org/noderpg/main)
+`Método online:` Utilize de seu navegador para entrar no site **EM UM COMPUTADOR** [online!](https://juliet83c.neocities.org/noderpg/main)
 
 `Método offline:` Utilize de qualquer método preferido para **__rodar um arquivo HTML__** em junção ao CSS e o JAVASCRIPT!
 
