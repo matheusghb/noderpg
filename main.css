@@ -91,6 +91,10 @@ header {
             display: flex;
             flex-direction: column;
 
+            #NAME, .routenlvl {
+                text-transform: capitalize;
+            }
+
             * {
                 z-index: 1;
             }
@@ -123,28 +127,24 @@ header {
                 background-color: var(--color2);
                 overflow-y: auto;
                 overflow-x: hidden;
-                line-break: anywhere;
                 padding: 7% 4% 0% 4%;
                 p {
                     margin-bottom: 3%;
                 }
-                
-                div {
-                    ul {
-                        display: flex;
-                        flex-direction: column;
-                        li {
-                            list-style-type: none;
-                            line-break: strict;
-                            i {
-                                border: 1px solid var(--color1);
-                                margin: .5%;
-                                padding: .5%;
-                            }
-                        }
-                        b {
-                            margin-left: auto;
-                        }
+                .value {
+                    display: flex;
+                    flex-direction: column;
+                    list-style-type: none;
+                    margin-bottom: 3%;
+                    h1 {
+                        font-size: 2vw;
+                        font-family: TEXT;
+                        background-color: var(--color1);
+                        color: var(--color2);
+                        margin-bottom: 2%;
+                    }
+                    b {
+                        margin-left: auto;
                     }
                 }
             }
